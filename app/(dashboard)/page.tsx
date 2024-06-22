@@ -71,7 +71,11 @@ function StatsCards(props: StatsCardProps) {
         title="نرخ پرش "
         icon={<TbArrowBounce className="text-red-600" />}
         helperText="درصد بازدیدی که پاسخی نداده اند"
-        value={data?.bounceRate.toLocaleString("fa-IR") + PERCENT || ""}
+        value={
+          data?.bounceRate == 100
+            ? "0" || ""
+            : data?.bounceRate.toLocaleString("fa-IR") || ""
+        }
         loading={loading}
         className="shadow-md shadow-red-600"
       />
