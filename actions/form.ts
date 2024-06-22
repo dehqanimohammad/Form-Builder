@@ -24,12 +24,12 @@ export async function GetFormStats() {
   const submissions = stats._sum.submissions || 0;
 
   let submissionRate = 0;
+  let bounceRate = 0;
 
   if (visits > 0) {
     submissionRate = (submissions / visits) * 100;
+    bounceRate = 100 - submissionRate;
   }
-
-  const bounceRate = 100 - submissionRate;
 
   return {
     visits,
@@ -38,3 +38,5 @@ export async function GetFormStats() {
     bounceRate,
   };
 }
+
+export async function CreateForm(data: { name: string; description: string }) {}

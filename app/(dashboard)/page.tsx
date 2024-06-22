@@ -37,6 +37,7 @@ interface StatsCardProps {
 }
 function StatsCards(props: StatsCardProps) {
   const { data, loading } = props;
+
   return (
     <div className="w-full pt-8 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       <StatsCard
@@ -52,7 +53,7 @@ function StatsCards(props: StatsCardProps) {
         title="تعداد ارسالی ها"
         icon={<FaWpforms className="text-yellow-600" />}
         helperText="تعداد کل پاسخ ارسالی ثبت شده"
-        value={data?.submissions.toLocaleString("fa-IR") || ""}
+        value={data?.submissions.toLocaleString("fa-IR") + PERCENT || ""}
         loading={loading}
         className="shadow-md shadow-yellow-600"
       />
