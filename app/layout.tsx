@@ -1,8 +1,9 @@
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Vazirmatn({ subsets: ["arabic"] });
 
@@ -17,21 +18,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    
-      <ClerkProvider>
-        <html lang="fa" dir='rtl'>
-          <body className={inter.className}>
-            <ThemeProvider
+    <ClerkProvider>
+      <html lang="fa" dir="rtl">
+        <body className={inter.className}>
+          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
-            disableTransitionOnChange>
-              {children}
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
           </ThemeProvider>
-          </body>
-          
-        </html>
-      </ClerkProvider>
-    
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

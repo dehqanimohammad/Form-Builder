@@ -9,7 +9,8 @@ import { TbArrowBounce } from "react-icons/tb";
 import { Separator } from "@/components/ui/separator";
 import CreateFormBtn from "@/components/CreateFormBtn";
 
-const PERCENT = "%";
+const PERCENT: any = "%";
+const ZERO: any = 0;
 
 export default function Home() {
   return (
@@ -73,8 +74,8 @@ function StatsCards(props: StatsCardProps) {
         helperText="درصد بازدیدی که پاسخی نداده اند"
         value={
           data?.bounceRate == 100
-            ? "0" || ""
-            : data?.bounceRate.toLocaleString("fa-IR") || ""
+            ? ZERO.toLocaleString("fa-IR") + PERCENT || ""
+            : data?.bounceRate.toLocaleString("fa-IR") + PERCENT || ""
         }
         loading={loading}
         className="shadow-md shadow-red-600"
