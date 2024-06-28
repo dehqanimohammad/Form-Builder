@@ -1,13 +1,27 @@
-import { GetFormStats } from "@/actions/form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GetFormStats, GetForms } from "@/actions/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ReactNode, Suspense } from "react";
 import { LuView } from "react-icons/lu";
 import { FaWpforms } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
+import { BiRightArrowAlt } from "react-icons/bi";
 import { TbArrowBounce } from "react-icons/tb";
 import { Separator } from "@/components/ui/separator";
 import CreateFormBtn from "@/components/CreateFormBtn";
+import { Form } from "@prisma/client";
+import { Badge } from "@/components/ui/badge";
+import { formatDistance } from "date-fns";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { FaEdit } from "react-icons/fa";
 
 const PERCENT: any = "%";
 const ZERO: any = 0;
@@ -23,6 +37,13 @@ export default function Home() {
       <Separator className="my-6" />
       <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <CreateFormBtn />
+        <Suspense
+          fallback={[1, 2].map((el) => (
+            <FormCardSkeleton key={el} />
+          ))}
+        >
+          <FormCards />
+        </Suspense>
       </div>
     </div>
   );
@@ -126,4 +147,67 @@ function StatsCard({
 
 function FormCardSkeleton() {
   return <Skeleton className="border-2 border-primary-/20 h-[190px] w-full" />;
+}
+
+async function FormCards() {
+  const forms = await GetForms();
+  return (
+    <>
+      {forms.map((form) => (
+        <FormCard key={form.id} form={form} />
+      ))}
+    </>
+  );
+}
+
+function FormCard({ form }: { form: Form }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 justify-between">
+          <span className="line-clamp-1 font-bold">{form.name}</span>
+          {form.published && <Badge>منتشر شده</Badge>}
+          {!form.published && <Badge variant={"destructive"}>پیش نویس</Badge>}
+        </CardTitle>
+        <CardDescription className="text-muted-foreground text-lg">
+          {!form.published && (
+            <span className="flex items-center gap-2">
+              <LuView className="text-muted-foreground" />
+              <span>{form.visits.toLocaleString("fa-IR")}</span>
+              <FaWpforms className="text-muted-foreground" />
+              <span>{form.submissions.toLocaleString("fa-IR")}</span>
+            </span>
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="h-[20px] truncate text-sm text-muted-foreground">
+        {form.description || "بدون توضیحات"}
+      </CardContent>
+      <CardFooter>
+        {form.published && (
+          <Button
+            variant={"secondary"}
+            asChild
+            className="w-full mt-2 text-md gap-2 items-center"
+          >
+            <Link href={`/forms/${form.id}`}>
+              دیدن ارسالی ها <BiRightArrowAlt />
+            </Link>
+          </Button>
+        )}
+        {!form.published && (
+          <Button
+            variant={"secondary"}
+            asChild
+            className="w-full mt-2 text-md gap-2 items-center"
+          >
+            <Link href={`/builder/${form.id}`}>
+              ویرایش فرم
+              <FaEdit />
+            </Link>
+          </Button>
+        )}
+      </CardFooter>
+    </Card>
+  );
 }
